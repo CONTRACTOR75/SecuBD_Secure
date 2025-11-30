@@ -19,12 +19,7 @@ public class SecureDemoApplication {
         System.out.println(" ");
         System.out.println("       SERVEUR EN VERSION SÉCURISÉE LANCÉE sur le port : http://localhost:8081 ");
         System.out.println(" ");
-        System.out.println("       Login ");
-        System.out.println("        → http://localhost:8081/login ");
-        System.out.println(" ");
-        System.out.println("       Register (GET vulnérable) ");
-        System.out.println("        → http://localhost:8081/register ");
-        System.out.println(" ");
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════╝");
+        System.out.println(" ");
     }
 }

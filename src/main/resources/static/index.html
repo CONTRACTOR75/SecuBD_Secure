@@ -459,7 +459,7 @@
             currentPort = 8081; // Fallback sur le port backend par défaut
         }
 
-        const API_BASE = `https://secubd-secure-aiven.onrender.com/api/auth`;
+        const API_BASE = `http://localhost:8081/api/auth`;
 
         // Gestion du token et de la session
         let sessionTimer;
@@ -623,7 +623,7 @@
             // Redirection sécurisée
 
             setTimeout(() => {
-                window.location.href = "https://secubd-secure-aiven.onrender.com";
+                window.location.href = "http://localhost:8081/index.html";
             }, 2000);
         }
 
@@ -729,7 +729,7 @@
                     showToast('Connexion réussie !', 'success');
 
                     setTimeout(() => {
-                        window.location.href = "https://secubd-secure-aiven.onrender.com/dashboard.html";
+                        window.location.href = "http://localhost:8081/dashboard.html";
                     }, 1000);
 
                     return;
@@ -781,7 +781,7 @@
                     TokenStorage.setRefreshToken(data.refreshToken);
                     ACCESS_TOKEN = data.token;
                     setTimeout(() => {
-                        window.location.href = `https://secubd-secure-aiven.onrender.com/dashboard.html`;
+                        window.location.href = `http://localhost:8081/dashboard.html`;
                     }, 1500);
                 } else {
                     if (data.errors) {
@@ -860,7 +860,6 @@
                 const userData = await response.json();
 
                 if (userData && !userData.error) {
-                    // Mise à jour sécurisée du DOM
                     updateUserDisplay('user-username', userData.username);
                     updateUserDisplay('user-email', userData.email);
                     updateUserDisplay('user-statut',
@@ -942,15 +941,13 @@
         // Initialisation au chargement de la page
         window.addEventListener('DOMContentLoaded', () => {
             const currentPage = window.location.pathname.split('/').pop();
-            if (currentPage === 'https://secubd-secure-aiven.onrender.com/dashboard.html') {
+            if (currentPage === 'dashboard.html') {
                 loadUserData();
                 startTokenRefresh();
             }
-            // Initialiser le timer de session
             resetSessionTimer();
         });
 
-        // Export des fonctions pour utilisation dans le HTML
         if (typeof window !== 'undefined') {
             window.secureApp = {
                 login,

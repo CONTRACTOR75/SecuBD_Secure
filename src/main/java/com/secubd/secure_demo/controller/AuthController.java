@@ -35,12 +35,8 @@ import java.util.regex.Pattern;
 @RestController
 @RequestMapping("/api/auth")
 @Validated
-@CrossOrigin(
-        origins = {"http://localhost:8080", "http://localhost:8081"},
-        allowedHeaders = {"Content-Type", "Authorization", "X-CSRF-Token"},
-        methods = {RequestMethod.POST, RequestMethod.OPTIONS},
-        maxAge = 3600
-)
+@CrossOrigin(origins = { "http://localhost:8080", "http://localhost:8081" }, allowedHeaders = { "Content-Type",
+        "Authorization", "X-CSRF-Token" }, methods = { RequestMethod.POST, RequestMethod.OPTIONS }, maxAge = 3600)
 public class AuthController {
 
     private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
@@ -59,11 +55,9 @@ public class AuthController {
     // Patterns de validation
     private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_-]{3,50}$");
     private static final Pattern EMAIL_PATTERN = Pattern.compile(
-            "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$"
-    );
+            "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
     private static final Pattern PASSWORD_PATTERN = Pattern.compile(
-            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12,}$"
-    );
+            "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{12,}$");
 
     @Autowired
     private UserRepository userRepository;
@@ -102,7 +96,7 @@ public class AuthController {
     }
 
     private void logAuditEvent(String username, String action, String ipAddress,
-                               boolean success, String details) {
+            boolean success, String details) {
         try {
             AuditLog log = new AuditLog();
             log.setUsername(username);
@@ -302,8 +296,8 @@ public class AuthController {
             response.put("success", true);
             response.put("message", "Compte créé avec succès");
             response.put("username", username);
-            response.put("token", token);  // AJOUTER
-            response.put("refreshToken", refreshToken);  // AJOUTER
+            response.put("token", token); // AJOUTER
+            response.put("refreshToken", refreshToken); // AJOUTER
 
             return ResponseEntity.status(HttpStatus.CREATED).body(response);
 
@@ -386,7 +380,8 @@ public class AuthController {
     }
 
     private String sanitizeInput(String input) {
-        if (input == null) return null;
+        if (input == null)
+            return null;
         // Supprimer les caractères potentiellement dangereux
         return input.trim()
                 .replaceAll("[<>\"'%;()&+]", "")
