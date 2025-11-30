@@ -459,7 +459,7 @@
             currentPort = 8081; // Fallback sur le port backend par défaut
         }
 
-        const API_BASE = `http://localhost:8081/api/auth`;
+        const API_BASE = `https://secubd-secure-aiven.onrender.com/api/auth`;
 
         // Gestion du token et de la session
         let sessionTimer;
@@ -621,7 +621,10 @@
             }
 
             // Redirection sécurisée
-            window.location.replace('index.html');
+
+            setTimeout(() => {
+                window.location.href = "https://secubd-secure-aiven.onrender.com";
+            }, 2000);
         }
 
         // Fonction fetch sécurisée avec JWT
@@ -726,7 +729,7 @@
                     showToast('Connexion réussie !', 'success');
 
                     setTimeout(() => {
-                        window.location.href = "dashboard.html";
+                        window.location.href = "https://secubd-secure-aiven.onrender.com/dashboard.html";
                     }, 1000);
 
                     return;
@@ -778,7 +781,7 @@
                     TokenStorage.setRefreshToken(data.refreshToken);
                     ACCESS_TOKEN = data.token;
                     setTimeout(() => {
-                        window.location.href = `dashboard.html`;
+                        window.location.href = `https://secubd-secure-aiven.onrender.com/dashboard.html`;
                     }, 1500);
                 } else {
                     if (data.errors) {
@@ -939,7 +942,7 @@
         // Initialisation au chargement de la page
         window.addEventListener('DOMContentLoaded', () => {
             const currentPage = window.location.pathname.split('/').pop();
-            if (currentPage === 'dashboard.html') {
+            if (currentPage === 'https://secubd-secure-aiven.onrender.com/dashboard.html') {
                 loadUserData();
                 startTokenRefresh();
             }

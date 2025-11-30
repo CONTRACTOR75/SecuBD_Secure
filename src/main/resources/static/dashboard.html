@@ -458,8 +458,8 @@
             console.error('Port non autorisé');
             currentPort = 8081;
         }
-
-        const API_BASE = ('http://') + window.location.hostname + ':' + currentPort;
+        //const testUrl = `https://secubd-secure-aiven.onrender.com/index.html`;
+        const API_BASE = 'https://secubd-secure-aiven.onrender.com/api/auth';
 
         // Session management avec timeout
         let sessionTimer;
@@ -510,7 +510,7 @@
             }
 
             // Redirection sécurisée
-            window.location.href = `index.html`;
+            window.location.href = `https://secubd-secure-aiven.onrender.com/`;
         }
 
         function getUrlParameter(name) {
