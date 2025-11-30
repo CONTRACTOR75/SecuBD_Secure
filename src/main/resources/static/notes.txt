@@ -1,0 +1,8 @@
+//QUELQUES COMPTES DEJA CREES
+
+user= admin2
+mot de passe = Admin2@2025secure
+user= admin3
+mot de passe = Admin3@2025secure
+user= admin4
+mot de passe = Admin4@2025secure

@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftDelivery - Connexion Partenaire</title>
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 0;
+            box-shadow: 0 10px 40px rgba(255, 184, 0, 0.3);
+            overflow: hidden;
+            max-width: 1000px;
+            width: 100%;
+            display: grid;
+            grid-template-columns: 45% 55%;
+        }
+
+        .brand-side {
+            background: #FFB800;
+            padding: 80px 50px;
+            color: #000000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+        }
+
+        .brand-side::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: -50px;
+            width: 100px;
+            height: 100%;
+            background: #FFB800;
+            transform: skewX(-10deg);
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .logo-box {
+            width: 60px;
+            height: 60px;
+            background: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+            font-size: 1.8em;
+            color: #FFB800;
+        }
+
+        .brand-side h1 {
+            font-size: 2.8em;
+            margin-bottom: 25px;
+            font-weight: 700;
+            letter-spacing: -1px;
+        }
+
+        .brand-side p {
+            font-size: 1.15em;
+            line-height: 1.7;
+            font-weight: 400;
+            opacity: 0.95;
+        }
+
+        .form-side {
+            padding: 80px 60px;
+            background: #FFFFFF;
+            position: relative;
+        }
+
+        .mode-indicator {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #FFB800;
+        }
+
+        .switch-version {
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            background: transparent;
+            color: #000000;
+            border: 2px solid #000000;
+            padding: 10px 24px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .switch-version:hover {
+            background: #000000;
+            color: #FFB800;
+        }
+
+        h2 {
+            color: #000000;
+            margin-bottom: 10px;
+            margin-top: 50px;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #666666;
+            margin-bottom: 40px;
+            font-size: 1em;
+        }
+
+        .tabs {
+            display: flex;
+            margin-bottom: 40px;
+            border-bottom: 3px solid #F5F5F5;
+        }
+
+        .tab {
+            padding: 15px 35px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 1.05em;
+            color: #666666;
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -3px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tab.active {
+            color: #000000;
+            border-bottom-color: #FFB800;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            color: #000000;
+            font-weight: 600;
+            font-size: 0.95em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px 18px;
+            border: 2px solid #E0E0E0;
+            background: #FAFAFA;
+            font-size: 1em;
+            transition: all 0.3s;
+            font-family: 'Arial', sans-serif;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #FFB800;
+            background: #FFFFFF;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 18px;
+            background: #FFB800;
+            color: #000000;
+            border: none;
+            font-size: 1.1em;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        button[type="submit"]:hover {
+            background: #000000;
+            color: #FFB800;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(255, 184, 0, 0.4);
+        }
+
+        .toast {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 18px 30px;
+            color: #000000;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            border-left: 5px solid;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.success {
+            background: #FFB800;
+            border-left-color: #000000;
+        }
+
+        .toast.error {
+            background: #000000;
+            color: #FFB800;
+            border-left-color: #FFB800;
+        }
+
+        .info {
+            display: block;
+            margin-top: 4px;
+            font-size: 0.85em;
+        }
+
+        .info.error {
+            color: #d9534f;
+        }
+
+        .info.success {
+            color: #5cb85c;
+        }
+
+        /* LOADER GÉNÉRIQUE SUR LES BOUTONS */
+        .btn-loading {
+            position: relative;
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        .btn-loading::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            right: 20px;
+            width: 18px;
+            height: 18px;
+            margin-top: -9px;
+            border: 3px solid transparent;
+            border-top-color: #000;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .brand-side {
+                padding: 50px 40px;
+            }
+
+            .brand-side::before {
+                display: none;
+            }
+
+            .form-side {
+                padding: 50px 40px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="toast" class="toast"></div>
+
+    <div class="container">
+        <div class="brand-side">
+            <div class="logo-container">
+                <div class="logo-box">S</div>
+            </div>
+            <h1>SwiftDelivery</h1>
+            <p>Solutions logistiques professionnelles pour entreprises. Accédez à votre espace de gestion et optimisez
+                vos opérations de livraison.</p>
+        </div>
+
+        <div class="form-side">
+            <button id="switch-btn" class="switch-version" onclick="switchVersion()"></button>
+            <div class="mode-indicator" id="version-badge"></div>
+
+            <h2>Connexion</h2>
+            <p class="subtitle">Accédez à votre espace professionnel</p>
+
+            <div class="tabs">
+                <button class="tab active" onclick="switchTab('login')">Connexion</button>
+                <button class="tab" onclick="switchTab('register')">Inscription</button>
+            </div>
+
+            <div id="login-tab" class="tab-content active">
+                <form id="login-form" onsubmit="handleLogin(event)">
+                    <div class="form-group">
+                        <label>Identifiant</label>
+                        <input type="text" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe</label>
+                        <input type="password" name="password" required>
+                    </div>
+                    <button type="submit">Se connecter</button>
+                </form>
+            </div>
+
+            <div id="register-tab" class="tab-content">
+                <form id="register-form" onsubmit="handleRegister(event)">
+                    <div class="form-group">
+                        <label>Identifiant</label>
+                        <input type="text" name="username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email professionnel</label>
+                        <input type="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Mot de passe</label>
+                        <input type="password" name="password" id="password" required>
+                        <small id="password-strength" class="info"></small>
+                    </div>
+                    <div class="form-group">
+                        <label>Confirmer le mot de passe</label>
+                        <input type="password" name="confirm_password" id="confirm_password" required>
+                        <small id="password-match" class="info"></small>
+                    </div>
+                    <button type="submit">Créer un compte</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // VERSION SÉCURISÉE AVEC JWT - PRODUCTION
+
+        // Configuration sécurisée
+        const CONFIG = {
+            MAX_USERNAME_LENGTH: 50,
+            MIN_USERNAME_LENGTH: 3,
+            MIN_PASSWORD_LENGTH: 12,
+            REQUEST_TIMEOUT: 10000,
+            MAX_RETRIES: 3,
+            ALLOWED_PORTS: [443, 8081, 8080],
+            SESSION_TIMEOUT: 1800000, // 30 minutes
+            TOKEN_REFRESH_INTERVAL: 3300000 // 55 minutes (refresh avant expiration)
+        };
+        let ACCESS_TOKEN = null;
+
+        // Setter
+        function setAccessToken(token) {
+            ACCESS_TOKEN = token;
+        }
+
+        // Getter
+        function getAccessToken() {
+            return ACCESS_TOKEN;
+        }
+
+        function initMode() {
+            document.getElementById('switch-btn').textContent = 'Passer en Mode A (Non-Sécurisé)';
+        }
+
+        function setLoading(button, isLoading) {
+            if (isLoading) {
+                button.classList.add("btn-loading");
+                button.disabled = true;
+            } else {
+                button.classList.remove("btn-loading");
+                button.disabled = false;
+            }
+        }
+
+        function switchTab(tab) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            event.target.classList.add('active');
+            document.getElementById(tab + '-tab').classList.add('active');
+        }
+
+        async function switchVersion() {
+            const btn = document.getElementById("switch-btn");
+            setLoading(btn, true);
+            try {
+                const testUrl = `http://localhost:8080/index.html`;
+                const response = await fetch(testUrl, {
+                    method: 'GET',
+                    mode: 'no-cors',
+                    signal: AbortSignal.timeout(2000)
+                });
+                window.location.href = testUrl;
+            } catch (error) {
+                showToast('Le service en Mode A (Non-Sécurisé) semble indisponible. Veuillez réessayer', 'error');
+            } finally {
+                setLoading(btn, false);
+            }
+        }
+
+        // Détection du port actuel
+        let currentPort = window.location.port ?
+            parseInt(window.location.port) :
+            (window.location.protocol === 'https:' ? 443 : 80);
+
+        // Validation du port
+        if (!CONFIG.ALLOWED_PORTS.includes(currentPort)) {
+            console.error('Port non autorisé');
+            currentPort = 8081; // Fallback sur le port backend par défaut
+        }
+
+        const API_BASE = `http://localhost:8081/api/auth`;
+
+        // Gestion du token et de la session
+        let sessionTimer;
+        let tokenRefreshTimer;
+
+        // Stockage sécurisé des tokens (utiliser sessionStorage, pas localStorage)
+        const TokenStorage = {
+            setToken(token) {
+                try {
+                    sessionStorage.setItem('authToken', token);
+                } catch (e) {
+                    console.error('Erreur de stockage du token:', e);
+                }
+            },
+
+            getToken() {
+                try {
+                    return sessionStorage.getItem('authToken');
+                } catch (e) {
+                    console.error('Erreur de récupération du token:', e);
+                    return null;
+                }
+            },
+
+            setRefreshToken(token) {
+                try {
+                    sessionStorage.setItem('refreshToken', token);
+                } catch (e) {
+                    console.error('Erreur de stockage du refresh token:', e);
+                }
+            },
+
+            getRefreshToken() {
+                try {
+                    return sessionStorage.getItem('refreshToken');
+                } catch (e) {
+                    console.error('Erreur de récupération du refresh token:', e);
+                    return null;
+                }
+            },
+
+            clear() {
+                try {
+                    sessionStorage.removeItem('authToken');
+                    sessionStorage.removeItem('refreshToken');
+                } catch (e) {
+                    console.error('Erreur de nettoyage des tokens:', e);
+                }
+            }
+        };
+
+        
+        // Refresh automatique du token
+        function startTokenRefresh() {
+            clearTimeout(tokenRefreshTimer);
+            tokenRefreshTimer = setTimeout(async () => {
+                try {
+                    await refreshAuthToken();
+                    startTokenRefresh(); // Relancer le timer
+                } catch (error) {
+                    console.error('Échec du refresh du token:', error);
+                    logout();
+                }
+            }, CONFIG.TOKEN_REFRESH_INTERVAL);
+        }
+
+        async function refreshAuthToken() {
+            const refreshToken = TokenStorage.getRefreshToken();
+            if (!refreshToken) {
+                throw new Error('Pas de refresh token disponible');
+            }
+
+            try {
+                const response = await secureFetch(`${API_BASE}/refresh`, {
+                    method: 'POST',
+                    body: JSON.stringify({ refreshToken })
+                });
+
+                const data = await response.json();
+
+                if (data.success && data.token) {
+                    TokenStorage.setToken(data.token);
+                    console.log('Token rafraîchi avec succès');
+                } else {
+                    throw new Error('Échec du rafraîchissement du token');
+                }
+            } catch (error) {
+                console.error('Erreur lors du refresh:', error);
+                throw error;
+            }
+        }
+
+        // Gestion du timer de session
+        function resetSessionTimer() {
+            clearTimeout(sessionTimer);
+            sessionTimer = setTimeout(() => {
+                showToast('Session expirée pour inactivité', 'error');
+                setTimeout(() => logout(), 2000);
+            }, CONFIG.SESSION_TIMEOUT);
+        }
+
+        // XSS Protection - Sanitize text content
+        function sanitizeText(text) {
+            if (typeof text !== 'string') return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Validation stricte du nom d'utilisateur
+        function isValidUsername(username) {
+            if (!username || typeof username !== 'string') return false;
+            if (username.length < CONFIG.MIN_USERNAME_LENGTH ||
+                username.length > CONFIG.MAX_USERNAME_LENGTH) return false;
+            return /^[a-zA-Z0-9_-]+$/.test(username);
+        }
+
+        // Validation de l'email
+        function isValidEmail(email) {
+            if (!email || typeof email !== 'string') return false;
+            return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+        }
+
+        // Validation du mot de passe
+        function isValidPassword(password) {
+            if (!password || typeof password !== 'string') return false;
+            if (password.length < CONFIG.MIN_PASSWORD_LENGTH) return false;
+
+            // Vérifier la complexité: majuscule, minuscule, chiffre, caractère spécial
+            const hasUpperCase = /[A-Z]/.test(password);
+            const hasLowerCase = /[a-z]/.test(password);
+            const hasNumber = /\d/.test(password);
+            const hasSpecialChar = /[@$!%*?&]/.test(password);
+
+            return hasUpperCase && hasLowerCase && hasNumber && hasSpecialChar;
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            toast.textContent = sanitizeText(message);
+            toast.className = `toast ${type} show`;
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+
+        }
+
+        function logout() {
+            // Nettoyer tous les timers
+            clearTimeout(sessionTimer);
+            clearTimeout(tokenRefreshTimer);
+
+            // Nettoyer les tokens
+            TokenStorage.clear();
+
+            // Nettoyer le sessionStorage complet
+            if (window.sessionStorage) {
+                sessionStorage.clear();
+            }
+
+            // Redirection sécurisée
+            window.location.replace('index.html');
+        }
+
+        // Fonction fetch sécurisée avec JWT
+        async function secureFetch(url, options = {}, retries = CONFIG.MAX_RETRIES) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT);
+
+            const token = TokenStorage.getToken();
+
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    signal: controller.signal,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        ...(token && { 'Authorization': `Bearer ${token}` }),
+                        ...options.headers
+                    },
+                    credentials: 'same-origin'
+                });
+
+                clearTimeout(timeoutId);
+
+                const isAuthRequest = url.includes('/login') ||
+                    url.includes('/register') ||
+                    url.includes('/refresh');
+
+                // Gérer l'expiration du token
+                if (response.status === 401 && !isAuthRequest && TokenStorage.getRefreshToken()) {
+                    // Tentative de refresh du token
+                    try {
+                        await refreshAuthToken();
+                        // Réessayer la requête avec le nouveau token
+                        return secureFetch(url, options, 0);
+                    } catch (refreshError) {
+                        showToast('Session expirée, veuillez vous reconnecter', 'error');
+                        setTimeout(() => logout(), 2000);
+                        throw new Error('Token expiré');
+                    }
+                }
+
+                if (!response.ok && response.status !== 400 && TokenStorage.getRefreshToken()) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                return response;
+
+            } catch (error) {
+                clearTimeout(timeoutId);
+
+                if (error.message && error.message.includes('401')) {
+                    throw error;
+                }
+
+                if (retries > 0 && error.name !== 'AbortError') {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    return secureFetch(url, options, retries - 1);
+                }
+
+                throw error;
+            }
+        }
+
+        // Fonction de login
+        async function login(username, password) {
+            // Validation côté client
+            if (!isValidUsername(username)) {
+                showToast('Nom d\'utilisateur invalide (3-50 caractères, lettres, chiffres, - et _)', 'error');
+                return;
+            }
+
+            if (!password || password.length < 8) {
+                showToast('Mot de passe trop court (minimum 8 caractères)', 'error');
+                return;
+            }
+
+            try {
+                const response = await secureFetch(`${API_BASE}/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+
+                let data = {};
+                try {
+                    data = await response.json();
+                } catch (e) {
+                    // En cas de réponse vide
+                    throw new Error("Réponse du serveur invalide");
+                }
+
+                if (response.ok && data.success) {
+                    TokenStorage.setToken(data.token);
+                    TokenStorage.setRefreshToken(data.refreshToken);
+                    ACCESS_TOKEN = data.token;
+
+                    startTokenRefresh();
+                    showToast('Connexion réussie !', 'success');
+
+                    setTimeout(() => {
+                        window.location.href = "dashboard.html";
+                    }, 1000);
+
+                    return;
+                }
+
+                const message = data.message || `Erreur ${response.status}`;
+                showToast(message, 'error');
+
+            } catch (error) {
+                console.error('Erreur de connexion:', error);
+                showToast(error.message || 'Erreur de connexion au serveur', 'error');
+            }
+        }
+
+        // Fonction d'inscription
+        async function register(username, email, password, confirmPassword) {
+            // Validations côté client
+            if (!isValidUsername(username)) {
+                showToast('Nom d\'utilisateur invalide (3-50 caractères, lettres, chiffres, - et _)', 'error');
+                return;
+            }
+
+            if (!isValidEmail(email)) {
+                showToast('Format d\'email invalide', 'error');
+                return;
+            }
+
+            if (!isValidPassword(password)) {
+                showToast('Le mot de passe doit contenir au moins 12 caractères dont majuscules, minuscules, chiffres et caractères spéciaux (@ $ ! % * ? &)', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showToast('Les mots de passe ne correspondent pas', 'error');
+                return;
+            }
+
+            try {
+                const response = await secureFetch(`${API_BASE}/register`, {
+                    method: 'POST',
+                    body: JSON.stringify({ username, email, password })
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    showToast('Compte créé avec succès ! Connexion...', 'success');
+                    TokenStorage.setToken(data.token);
+                    TokenStorage.setRefreshToken(data.refreshToken);
+                    ACCESS_TOKEN = data.token;
+                    setTimeout(() => {
+                        window.location.href = `dashboard.html`;
+                    }, 1500);
+                } else {
+                    if (data.errors) {
+                        // Afficher les erreurs de validation
+                        const errorMessages = Object.values(data.errors).join(', ');
+                        showToast(errorMessages, 'error');
+                    } else {
+                        showToast(data.message || 'Erreur lors de l\'inscription', 'error');
+                    }
+                }
+
+            } catch (error) {
+                console.error('Erreur d\'inscription:', error);
+                showToast('Erreur de connexion au serveur', 'error');
+            }
+        }
+
+        // HANDLERS POUR LES FORMULAIRES
+        function handleLogin(event) {
+            event.preventDefault();
+            const form = event.target;
+            const username = form.username.value.trim();
+            const password = form.password.value;
+            const btn = form.querySelector("button[type=submit]");
+
+            setLoading(btn, true);
+
+            login(username, password)
+                .catch(() => { })
+                .finally(() => setLoading(btn, false));
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const form = event.target;
+            const username = form.username.value.trim();
+            const email = form.email.value.trim();
+            const password = form.password.value;
+            const confirmPassword = form.confirm_password.value;
+            const btn = form.querySelector("button[type=submit]");
+            setLoading(btn, true);
+
+            register(username, email, password, confirmPassword)
+                .catch(() => { })
+                .finally(() => setLoading(btn, false));
+        }
+
+        // Charger les données utilisateur (pour le dashboard)
+        async function loadUserData() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const username = urlParams.get('user');
+
+            if (!username || !isValidUsername(username)) {
+                showToast('Utilisateur invalide', 'error');
+                setTimeout(() => logout(), 2000);
+                return;
+            }
+
+            // Vérifier qu'on a un token
+            if (!TokenStorage.getToken()) {
+                showToast('Non authentifié', 'error');
+                setTimeout(() => logout(), 2000);
+                return;
+            }
+
+            // Affichage sécurisé du username
+            const usernameDisplay = document.getElementById('username-display');
+            const userAvatar = document.getElementById('user-avatar');
+
+            if (usernameDisplay) usernameDisplay.textContent = sanitizeText(username);
+            if (userAvatar) userAvatar.textContent = username.charAt(0).toUpperCase();
+
+            try {
+                const encodedUsername = encodeURIComponent(username);
+                const response = await secureFetch(`${API_BASE}/../user?username=${encodedUsername}`);
+                const userData = await response.json();
+
+                if (userData && !userData.error) {
+                    // Mise à jour sécurisée du DOM
+                    updateUserDisplay('user-username', userData.username);
+                    updateUserDisplay('user-email', userData.email);
+                    updateUserDisplay('user-statut',
+                        userData.locked_until == null ? 'Compte Actif' : 'Compte Bloqué');
+                    updateUserDisplay('user-attemps',
+                        userData.failed_attempts == 0 ?
+                            'Aucune tentative échouée' :
+                            userData.failed_attempts.toString());
+                    updateUserDisplay('user-locked_until',
+                        userData.locked_until || 'Compte non bloqué');
+                }
+
+                resetSessionTimer();
+
+            } catch (error) {
+                console.error('Erreur de chargement:', error);
+                showToast('Erreur de chargement des données', 'error');
+            }
+        }
+
+        function updateUserDisplay(elementId, content, defaultText = 'Non disponible') {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            el.textContent = sanitizeText(content || defaultText);
+        }
+
+        // Event listeners pour réinitialiser le timer de session
+        ['click', 'keypress', 'scroll', 'mousemove'].forEach(event => {
+            document.addEventListener(event, resetSessionTimer, { passive: true });
+        });
+
+        const password = document.getElementById("password");
+        const confirmPassword = document.getElementById("confirm_password");
+        const strengthInfo = document.getElementById("password-strength");
+        const matchInfo = document.getElementById("password-match");
+
+        if (password) {
+            password.addEventListener("input", () => {
+                const value = password.value;
+
+                const rules = [
+                    { regex: /.{8,}/, text: "Au moins 8 caractères" },
+                    { regex: /[A-Z]/, text: "Au moins une majuscule" },
+                    { regex: /[a-z]/, text: "Au moins une minuscule" },
+                    { regex: /[0-9]/, text: "Au moins un chiffre" },
+                    { regex: /[^A-Za-z0-9]/, text: "Au moins un caractère spécial" }
+                ];
+
+                let passed = 0;
+                rules.forEach(rule => { if (rule.regex.test(value)) passed++; });
+
+                if (value.length === 0) {
+                    strengthInfo.textContent = "";
+                    strengthInfo.className = "info";
+                    return;
+                }
+
+                strengthInfo.textContent = `Mot de passe ${passed <= 4 ? 'faible' : 'fort'} ${passed}/5`;
+                strengthInfo.className = passed <= 4 ? "info error" : "info success";
+            });
+        }
+
+        if (confirmPassword) {
+            confirmPassword.addEventListener("input", () => {
+                const value = confirmPassword.value;
+                if (confirmPassword.value != password.value) {
+                    matchInfo.textContent = "Les mots de passe ne correspondent pas";
+                    matchInfo.className = "info error";
+                }
+
+                if (value.length === 0) {
+                    matchInfo.textContent = "";
+                    matchInfo.className = "info";
+                    return;
+                }
+            });
+        }
+
+        // Initialisation au chargement de la page
+        window.addEventListener('DOMContentLoaded', () => {
+            const currentPage = window.location.pathname.split('/').pop();
+            if (currentPage === 'dashboard.html') {
+                loadUserData();
+                startTokenRefresh();
+            }
+            // Initialiser le timer de session
+            resetSessionTimer();
+        });
+
+        // Export des fonctions pour utilisation dans le HTML
+        if (typeof window !== 'undefined') {
+            window.secureApp = {
+                login,
+                register,
+                logout,
+                loadUserData
+            };
+        }
+
+        window.onload = initMode;
+
+    </script>
+</body>
+
+</html>

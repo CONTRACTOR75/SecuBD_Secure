@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="icon" href="logo.png" type="image/x-icon">
+    <title>SwiftDelivery - Tableau de Bord</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', 'Helvetica', sans-serif;
+            background: #F5F5F5;
+        }
+
+        .navbar {
+            background: #000000;
+            color: white;
+            padding: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+
+            position: fixed;
+            top: 0;
+            /* Important */
+            left: 0;
+            /* Important */
+            width: 100%;
+            /* Important */
+            z-index: 1000;
+        }
+
+        .navbar-left {
+            display: flex;
+            align-items: center;
+            padding: 0;
+        }
+
+        .logo-section {
+            background: #FFB800;
+            padding: 20px 40px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-box {
+            width: 45px;
+            height: 45px;
+            background: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5em;
+            color: #FFB800;
+        }
+
+        .navbar-left h1 {
+            font-size: 1.6em;
+            color: #000000;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            padding: 0 40px;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            background: #FFB800;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: #000000;
+            font-size: 1.1em;
+        }
+
+        .username {
+            color: #FFFFFF;
+            font-weight: 600;
+            font-size: 1em;
+        }
+
+        .logout-btn {
+            background: transparent;
+            border: 2px solid #FFB800;
+            color: #FFB800;
+            padding: 10px 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: 0.9em;
+        }
+
+        .logout-btn:hover {
+            background: #FFB800;
+            color: #000000;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            margin-top: 80px;
+        }
+
+        .welcome-section {
+            background: #FFFFFF;
+            padding: 40px;
+            margin-bottom: 30px;
+            border-left: 6px solid #FFB800;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .welcome-section h2 {
+            color: #000000;
+            margin-bottom: 12px;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        .welcome-section p {
+            color: #666666;
+            font-size: 1.05em;
+            line-height: 1.6;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: #FFFFFF;
+            padding: 35px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s;
+            border-top: 4px solid #000000;
+            position: relative;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 184, 0, 0.2);
+            border-top-color: #FFB800;
+        }
+
+        .stat-icon {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: #FFB800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #000000;
+        }
+
+        .stat-card h3 {
+            color: #000000;
+            font-size: 2.8em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .stat-card p {
+            color: #666666;
+            font-size: 1em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+        }
+
+        .info-section {
+            background: #FFFFFF;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .info-section h3 {
+            color: #000000;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #FFB800;
+            font-size: 1.5em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .info-row {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            padding: 18px 0;
+            border-bottom: 1px solid #F0F0F0;
+            gap: 20px;
+        }
+
+        .info-row:last-child {
+            border-bottom: none;
+        }
+
+        .info-label {
+            font-weight: 700;
+            color: #000000;
+            text-transform: uppercase;
+            font-size: 0.85em;
+            letter-spacing: 0.5px;
+        }
+
+        .info-value {
+            color: #666666;
+            font-size: 0.95em;
+        }
+
+        .activity-section {
+            background: #000000;
+            color: #FFFFFF;
+            padding: 40px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .activity-section h3 {
+            color: #FFB800;
+            margin-bottom: 25px;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .activity-item {
+            padding: 15px 0;
+            border-bottom: 1px solid #333333;
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-time {
+            color: #FFB800;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .activity-text {
+            color: #CCCCCC;
+            font-size: 0.95em;
+            line-height: 1.5;
+        }
+
+        .toast {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            padding: 18px 30px;
+            color: #000000;
+            font-weight: 600;
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.3s;
+            z-index: 1000;
+            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.3);
+            border-left: 5px solid #000000;
+            margin-top: 5em;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.error {
+            background: #000000;
+            color: #FFB800;
+            border-left-color: #FFB800;
+        }
+
+        @media (max-width: 1024px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+            }
+
+            .navbar-right {
+                padding: 20px;
+                justify-content: space-between;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toast {
+                margin-top: 10em;
+            }
+
+            .container {
+                margin-top: 10em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="toast" class="toast"></div>
+
+    <nav class="navbar">
+        <div class="navbar-left">
+            <div class="logo-section">
+                <div class="logo-box">S</div>
+                <h1>SwiftDelivery</h1>
+            </div>
+        </div>
+        <div class="navbar-right">
+            <div class="user-info">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span class="username" id="username-display"></span>
+            </div>
+            <button class="logout-btn" onclick="logout()">Déconnexion</button>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="welcome-section">
+            <h2>Tableau de Bord</h2>
+            <p>Vue d'ensemble de vos opérations logistiques et performances en temps réel</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon">→</div>
+                <h3>47</h3>
+                <p>En Transit</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✓</div>
+                <h3>324</h3>
+                <p>Livrées</p>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">★</div>
+                <h3>98.5%</h3>
+                <p>Satisfaction</p>
+            </div>
+        </div>
+
+        <div class="content-grid">
+            <div class="info-section">
+                <h3>Informations du Compte</h3>
+                <div id="user-info">
+                    <div class="info-row">
+                        <div class="info-label">Identifiant</div>
+                        <div class="info-value" id="user-username">Chargement...</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Email</div>
+                        <div class="info-value" id="user-email">Chargement...</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Statut</div>
+                        <div class="info-value" id="user-statut">Chargement...</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Tentatives de connexion échouées</div>
+                        <div class="info-value" id="user-attempts">Chargement...</div>
+                    </div>
+                    <div class="info-row">
+                        <div class="info-label">Compte bloqué jusquà :</div>
+                        <div class="info-value" id="user-locked_until">Chargement...</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="activity-section">
+                <h3>Activité Récente</h3>
+                <div class="activity-item">
+                    <div class="activity-time">Il y a 2 heures</div>
+                    <div class="activity-text">Livraison #3847 complétée avec succès</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-time">Il y a 5 heures</div>
+                    <div class="activity-text">Nouveau colis enregistré pour livraison express</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-time">Hier</div>
+                    <div class="activity-text">Mise à jour des informations de facturation</div>
+                </div>
+                <div class="activity-item">
+                    <div class="activity-time">Il y a 2 jours</div>
+                    <div class="activity-text">15 livraisons complétées</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // VERSION SÉCURISÉE - PRODUCTION
+
+        // Configuration sécurisée
+        const CONFIG = {
+            MAX_USERNAME_LENGTH: 50,
+            REQUEST_TIMEOUT: 10000,
+            MAX_RETRIES: 3,
+            ALLOWED_PORTS: [443, 8081, 8080],
+            SESSION_TIMEOUT: 1800000 // 30 minutes
+        };
+
+        let currentPort = window.location.port;
+
+        // Validation du port
+        if (!CONFIG.ALLOWED_PORTS.includes(currentPort)) {
+            console.error('Port non autorisé');
+            currentPort = 8081;
+        }
+
+        const API_BASE = ('http://') + window.location.hostname + ':' + currentPort;
+
+        // Session management avec timeout
+        let sessionTimer;
+        function resetSessionTimer() {
+            clearTimeout(sessionTimer);
+            sessionTimer = setTimeout(() => {
+                showToast('Session expirée pour inactivité', 'error');
+                setTimeout(() => logout(), 2000);
+            }, CONFIG.SESSION_TIMEOUT);
+        }
+
+        // XSS Protection - Sanitize text content
+        function sanitizeText(text) {
+            if (typeof text !== 'string') return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Validation stricte du nom d'utilisateur
+        function isValidUsername(username) {
+            if (!username || typeof username !== 'string') return false;
+            if (username.length > CONFIG.MAX_USERNAME_LENGTH) return false;
+            // Autoriser uniquement lettres, chiffres, tirets et underscores
+            return /^[a-zA-Z0-9_-]+$/.test(username);
+        }
+
+        function showToast(message, type) {
+            const toast = document.getElementById('toast');
+            if (!toast) return;
+
+            // Sanitize le message pour éviter XSS
+            toast.textContent = sanitizeText(message);
+            toast.className = `toast ${type} show`;
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        function logout() {
+            // Nettoyer les données sensibles
+            clearTimeout(sessionTimer);
+
+            // Clear toutes les données de session
+            if (window.sessionStorage) {
+                sessionStorage.clear();
+            }
+
+            // Redirection sécurisée
+            window.location.href = `index.html`;
+        }
+
+        function getUrlParameter(name) {
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const value = urlParams.get(name);
+                return value || '';
+            } catch (error) {
+                console.error('Erreur de parsing URL:', error);
+                return '';
+            }
+        }
+
+        // Fonction fetch sécurisée avec timeout et retry
+        async function secureFetch(url, options = {}, retries = CONFIG.MAX_RETRIES) {
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), CONFIG.REQUEST_TIMEOUT);
+
+            const token = getAccessToken();
+
+            try {
+                const response = await fetch(url, {
+                    ...options,
+                    signal: controller.signal,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        ...(token && { 'Authorization': `Bearer ${token}` }),
+                        ...options.headers
+                    },
+                    credentials: 'same-origin'
+                });
+
+                clearTimeout(timeoutId);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                return response;
+            } catch (error) {
+                clearTimeout(timeoutId);
+
+                if (retries > 0 && error.name !== 'AbortError') {
+                    await new Promise(resolve => setTimeout(resolve, 1000));
+                    return secureFetch(url, options, retries - 1);
+                }
+                throw error;
+            }
+        }
+
+        // Validation et sanitization des données utilisateur
+        function validateAndSanitizeUserData(userData) {
+            if (!userData || typeof userData !== 'object') {
+                return null;
+            }
+
+            return {
+                username: sanitizeText(userData.username || ''),
+                email: sanitizeText(userData.email || ''),
+                locked_until: userData.locked_until ? sanitizeText(userData.locked_until) : null,
+                failed_attempts: typeof userData.failed_attempts === 'number' ? userData.failed_attempts : 0
+            };
+        }
+
+        // Mise à jour sécurisée du DOM
+        function updateUserDisplay(element, content, defaultText = 'Données introuvables') {
+            const el = document.getElementById(element);
+            if (!el) return;
+
+            el.textContent = content || defaultText;
+        }
+
+        // Récupération du token depuis sessionStorage
+        let ACCESS_TOKEN = sessionStorage.getItem('authToken') || null;
+
+        // Getter
+        function getAccessToken() {
+            return ACCESS_TOKEN;
+        }
+
+        async function loadUserData() {
+
+            if (!getAccessToken()) {
+                showToast("Non authentifié", "error");
+                setTimeout(() => logout(), 2000);
+                return;
+            }
+
+            try {
+                const response = await secureFetch(`${API_BASE}/me`);
+                const user = await response.json();
+
+                updateUserDisplay('username-display', user.username);
+                updateUserDisplay('user-username', user.username);
+                updateUserDisplay('user-email', user.email);
+                updateUserDisplay('user-attempts', (user.failedAttempts ?? 0).toString());
+                updateUserDisplay('user-locked_until', user.lockedUntil || 'Non bloqué');
+                updateUserDisplay('user-statut', user.lockedUntil ? 'Compte Bloqué' : 'Compte Actif');
+
+                document.getElementById("user-avatar").textContent =
+                    user.username.charAt(0).toUpperCase();
+
+            } catch (e) {
+                console.error("Erreur dans loadUserData:", e);
+                showToast("Erreur de chargement", "error");
+                setTimeout(() => logout(), 2000);
+            }
+        }
+
+
+        // Event listeners pour réinitialiser le timer de session
+        ['click', 'keypress', 'scroll', 'mousemove'].forEach(event => {
+            document.addEventListener(event, resetSessionTimer, { passive: true });
+        });
+
+        // CSP et sécurité supplémentaire
+        window.addEventListener('DOMContentLoaded', () => {
+            // Initialisation du token
+            ACCESS_TOKEN = sessionStorage.getItem('authToken');
+
+            if (!ACCESS_TOKEN) {
+                showToast("Non authentifié", "error");
+                setTimeout(() => logout(), 2000);
+                return;
+            }
+
+            loadUserData(); // ici le secureFetch inclura le token automatiquement
+        });
+    </script>
+</body>
+
+</html>
