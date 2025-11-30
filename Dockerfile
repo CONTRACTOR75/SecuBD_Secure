@@ -37,4 +37,4 @@ COPY --from=build /build/target/secure-demo-1.0.0.jar app.jar
 EXPOSE ${PORT:-8081}
 
 # Lancer l'app
-ENTRYPOINT ["sh", "-c", "java -jar /app/app.jar --server.port=${PORT:-8081}"]
+ENTRYPOINT ["sh", "-c", "java -Dserver.port=${PORT} -jar /app/app.jar"]
