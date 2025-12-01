@@ -3,12 +3,9 @@
 
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <link rel="icon" href="logo.png" type="image/x-icon">
     <title>SwiftDelivery - Tableau de Bord</title>
-
     <style>
         * {
             margin: 0;
@@ -440,7 +437,8 @@
     </div>
 
     <script>
-        // VERSION SÉCURISÉE - PRODUCTION
+        const API_BASE = 'https://secubd-secure-aiven.onrender.com';
+        //const API_BASE = 'http://localhost:8081';
 
         // Configuration sécurisée
         const CONFIG = {
@@ -458,8 +456,6 @@
             console.error('Port non autorisé');
             currentPort = 8081;
         }
-        //const testUrl = `https://secubd-secure-aiven.onrender.com/index.html`;
-        const API_BASE = 'https://secubd-secure-aiven.onrender.com/api/users';
 
         // Session management avec timeout
         let sessionTimer;
@@ -510,7 +506,7 @@
             }
 
             // Redirection sécurisée
-            window.location.href = `https://secubd-secure-aiven.onrender.com/`;
+            window.location.href = API_BASE;
         }
 
         function getUrlParameter(name) {
@@ -601,7 +597,7 @@
             }
 
             try {
-                const response = await secureFetch(`${API_BASE}/me`);
+                const response = await secureFetch(`${API_BASE}/api/users/me`);
                 const user = await response.json();
 
                 updateUserDisplay('username-display', user.username);

@@ -385,6 +385,10 @@
 
     <script>
         // VERSION SÉCURISÉE AVEC JWT - PRODUCTION
+        const API_BASE = `https://secubd-secure-aiven.onrender.com`;
+        const targetURL = `https://secubd-insecure-aiven.onrender.com`;
+        // const targetURL = `https://localhost:8080`;
+        // const API_BASE = `http://localhost:8081`;
 
         // Configuration sécurisée
         const CONFIG = {
@@ -393,7 +397,7 @@
             MIN_PASSWORD_LENGTH: 12,
             REQUEST_TIMEOUT: 10000,
             MAX_RETRIES: 3,
-            ALLOWED_PORTS: [443, 8081, 8080],
+            // ALLOWED_PORTS: [443, 8081, 8080],
             SESSION_TIMEOUT: 1800000, // 30 minutes
             TOKEN_REFRESH_INTERVAL: 3300000 // 55 minutes (refresh avant expiration)
         };
@@ -434,13 +438,12 @@
             const btn = document.getElementById("switch-btn");
             setLoading(btn, true);
             try {
-                const testUrl = `http://localhost:8080/index.html`;
-                const response = await fetch(testUrl, {
+                const response = await fetch(targetURL, {
                     method: 'GET',
                     mode: 'no-cors',
                     signal: AbortSignal.timeout(2000)
                 });
-                window.location.href = testUrl;
+                window.location.href = targetURL;
             } catch (error) {
                 showToast('Le service en Mode A (Non-Sécurisé) semble indisponible. Veuillez réessayer', 'error');
             } finally {
@@ -454,12 +457,10 @@
             (window.location.protocol === 'https:' ? 443 : 80);
 
         // Validation du port
-        if (!CONFIG.ALLOWED_PORTS.includes(currentPort)) {
-            console.error('Port non autorisé');
-            currentPort = 8081; // Fallback sur le port backend par défaut
-        }
-
-        const API_BASE = `https://secubd-secure-aiven.onrender.com/api/auth`;
+        //if (!CONFIG.ALLOWED_PORTS.includes(currentPort)) {
+        //  console.error('Port non autorisé');
+        //   currentPort = 8081; // Fallback sur le port backend par défaut
+        //}
 
         // Gestion du token et de la session
         let sessionTimer;
@@ -533,7 +534,7 @@
             }
 
             try {
-                const response = await secureFetch(`${API_BASE}/refresh`, {
+                const response = await secureFetch(`${API_BASE}/api/auth/refresh`, {
                     method: 'POST',
                     body: JSON.stringify({ refreshToken })
                 });
@@ -623,7 +624,7 @@
             // Redirection sécurisée
 
             setTimeout(() => {
-                window.location.href = "https://secubd-secure-aiven.onrender.com";
+                window.location.href = API_BASE+'/login';
             }, 2000);
         }
 
@@ -703,7 +704,7 @@
             }
 
             try {
-                const response = await secureFetch(`${API_BASE}/login`, {
+                const response = await secureFetch(`${API_BASE}/api/auth/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -729,7 +730,7 @@
                     showToast('Connexion réussie !', 'success');
 
                     setTimeout(() => {
-                        window.location.href = "https://secubd-secure-aiven.onrender.com/dashboard.html";
+                        window.location.href = API_BASE+'/dashboard.html';
                     }, 1000);
 
                     return;
@@ -768,7 +769,7 @@
             }
 
             try {
-                const response = await secureFetch(`${API_BASE}/register`, {
+                const response = await secureFetch(`${API_BASE}/api/auth/register`, {
                     method: 'POST',
                     body: JSON.stringify({ username, email, password })
                 });
@@ -781,7 +782,7 @@
                     TokenStorage.setRefreshToken(data.refreshToken);
                     ACCESS_TOKEN = data.token;
                     setTimeout(() => {
-                        window.location.href = `https://secubd-secure-aiven.onrender.com/dashboard.html`;
+                        window.location.href = API_BASE+'/dashboard.html';
                     }, 1500);
                 } else {
                     if (data.errors) {
@@ -856,7 +857,7 @@
 
             try {
                 const encodedUsername = encodeURIComponent(username);
-                const response = await secureFetch(`${API_BASE}/../user?username=${encodedUsername}`);
+                const response = await secureFetch(`${API_BASE}/api/users/me`);
                 const userData = await response.json();
 
                 if (userData && !userData.error) {
@@ -942,7 +943,7 @@
         // Initialisation au chargement de la page
         window.addEventListener('DOMContentLoaded', () => {
             const currentPage = window.location.pathname.split('/').pop();
-            if (currentPage === 'https://secubd-secure-aiven.onrender.com/dashboard.html') {
+            if (currentPage === (API_BASE+'/dashboard.html')) {
                 loadUserData();
                 startTokenRefresh();
             }
