@@ -440,7 +440,8 @@
     </div>
 
     <script>
-        // VERSION SÉCURISÉE - PRODUCTION
+        const API_BASE = 'http://localhost:8081';
+        // const API_BASE = 'https://'; // Pour le mode en ligne
 
         // Configuration sécurisée
         const CONFIG = {
@@ -458,7 +459,7 @@
             console.error('Port non autorisé');
             currentPort = 8081;
         }
-        const API_BASE = 'http://localhost:8081/api/users';
+        
 
         // Session management avec timeout
         let sessionTimer;
@@ -509,7 +510,7 @@
             }
 
             // Redirection sécurisée
-            window.location.href = `https://secubd-secure-aiven.onrender.com/`;
+            window.location.href = API_BASE;
         }
 
         function getUrlParameter(name) {
@@ -600,7 +601,7 @@
             }
 
             try {
-                const response = await secureFetch(`${API_BASE}/me`);
+                const response = await secureFetch(`${API_BASE}/api/users/me`);
                 const user = await response.json();
 
                 updateUserDisplay('username-display', user.username);

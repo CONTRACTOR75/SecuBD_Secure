@@ -385,6 +385,17 @@
 
     <script>
         // VERSION SÉCURISÉE AVEC JWT - PRODUCTION
+        const API_BASE = `http://localhost:8081`;
+        const targetURL =  'http://localhost:8080';
+
+        //const API_BASE = `http://`;
+        //const targetURL =  'http://';
+
+        if (window.location.href==(API_BASE+'/login')){
+            switchTab('login');
+        }else if ( window.location.href==(API_BASE+'/register')){
+            switchTab('register');
+        }
 
         // Configuration sécurisée
         const CONFIG = {
@@ -394,8 +405,8 @@
             REQUEST_TIMEOUT: 10000,
             MAX_RETRIES: 3,
             ALLOWED_PORTS: [443, 8081, 8080],
-            SESSION_TIMEOUT: 1800000, // 30 minutes
-            TOKEN_REFRESH_INTERVAL: 3300000 // 55 minutes (refresh avant expiration)
+            SESSION_TIMEOUT: 1800000, // 30 min
+            TOKEN_REFRESH_INTERVAL: 3300000 // 55 min (avant refresh)
         };
         let ACCESS_TOKEN = null;
 
@@ -434,7 +445,7 @@
             const btn = document.getElementById("switch-btn");
             setLoading(btn, true);
             try {
-                const testUrl = `http://localhost:8080/index.html`;
+                const testUrl = targetURL ;
                 const response = await fetch(testUrl, {
                     method: 'GET',
                     mode: 'no-cors',
@@ -458,8 +469,6 @@
             console.error('Port non autorisé');
             currentPort = 8081; // Fallback sur le port backend par défaut
         }
-
-        const API_BASE = `http://localhost:8081/api/auth`;
 
         // Gestion du token et de la session
         let sessionTimer;
@@ -510,8 +519,7 @@
                 }
             }
         };
-
-        
+   
         // Refresh automatique du token
         function startTokenRefresh() {
             clearTimeout(tokenRefreshTimer);
@@ -533,7 +541,7 @@
             }
 
             try {
-                const response = await secureFetch(`${API_BASE}/refresh`, {
+                const response = await secureFetch(`${API_BASE}/api/auth/refresh`, {
                     method: 'POST',
                     body: JSON.stringify({ refreshToken })
                 });
@@ -623,7 +631,7 @@
             // Redirection sécurisée
 
             setTimeout(() => {
-                window.location.href = "http://localhost:8081/index.html";
+                window.location.href = API_BASE;
             }, 2000);
         }
 
@@ -703,7 +711,7 @@
             }
 
             try {
-                const response = await secureFetch(`${API_BASE}/login`, {
+                const response = await secureFetch(`${API_BASE}/api/auth/login`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -729,7 +737,7 @@
                     showToast('Connexion réussie !', 'success');
 
                     setTimeout(() => {
-                        window.location.href = "http://localhost:8081/dashboard.html";
+                        window.location.href = API_BASE+'/dashboard.html';
                     }, 1000);
 
                     return;
@@ -768,7 +776,7 @@
             }
 
             try {
-                const response = await secureFetch(`${API_BASE}/register`, {
+                const response = await secureFetch(`${API_BASE}/api/auth/register`, {
                     method: 'POST',
                     body: JSON.stringify({ username, email, password })
                 });
@@ -781,7 +789,7 @@
                     TokenStorage.setRefreshToken(data.refreshToken);
                     ACCESS_TOKEN = data.token;
                     setTimeout(() => {
-                        window.location.href = `http://localhost:8081/dashboard.html`;
+                        window.location.href = `${API_BASE}/dashboard.html`;
                     }, 1500);
                 } else {
                     if (data.errors) {
@@ -856,7 +864,7 @@
 
             try {
                 const encodedUsername = encodeURIComponent(username);
-                const response = await secureFetch(`${API_BASE}/../user?username=${encodedUsername}`);
+                const response = await secureFetch(`${API_BASE}/api/users/me`);
                 const userData = await response.json();
 
                 if (userData && !userData.error) {

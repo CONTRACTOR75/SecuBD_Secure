@@ -17,7 +17,9 @@ public class SecureDemoApplication {
         System.out.println(" ");
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════╗");
         System.out.println(" ");
-        System.out.println("       SERVEUR EN VERSION SÉCURISÉE LANCÉE sur le port : http://localhost:8081 ");
+        System.out.println("       SERVEUR EN VERSION SÉCURISÉE LANCÉE avec success ");
+        System.out.println(" ");
+        System.out.println("       http://localhost:8081");
         System.out.println(" ");
         System.out.println("════════════════════════════════════════════════════════════════════════════════════════╝");
         System.out.println(" ");
